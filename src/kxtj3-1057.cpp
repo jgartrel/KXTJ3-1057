@@ -343,6 +343,7 @@ kxtj3_status_t KXTJ3::intConf( uint16_t threshold, uint8_t moveDur, uint8_t naDu
 	
 	_reg1 |= (0x01 << 1);
 
+	_DEBBUG ("KXTJ3_CTRL_REG1: 0x", _reg1);
 	returnError = writeRegister(KXTJ3_CTRL_REG1, _reg1);
 
 	// Build INT_CTRL_REG2
@@ -352,7 +353,7 @@ kxtj3_status_t KXTJ3::intConf( uint16_t threshold, uint8_t moveDur, uint8_t naDu
 	if( unlatched == true )
 		dataToWrite |= (0x01 << 7);     // Unlatched interrupt enabled
 
-	_DEBBUG ("KXTJ3_INT_CTRL_REG1: 0x", dataToWrite);
+	_DEBBUG ("KXTJ3_INT_CTRL_REG2: 0x", dataToWrite);
 	returnError = writeRegister(KXTJ3_INT_CTRL_REG2, dataToWrite);
 
 	// Set WAKE-UP (motion detect) Threshold
