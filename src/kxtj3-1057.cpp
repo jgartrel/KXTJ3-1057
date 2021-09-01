@@ -397,3 +397,17 @@ bool KXTJ3::isMotionInt()
 
 	return ( int_src_1 & 0b10) >> 1; // return WUFS bit (1 when motion int)
 }
+
+kxtj3_axis_mask KXTJ3::intSource()
+{
+	uint8_t int_src_2;
+
+	if (readRegister(&int_src_2, KXTJ3_INT_SOURCE2) == IMU_SUCCESS)
+	{
+	  return ( int_src_2 & 0x3F ); // return bit0 through bit5
+	}
+	else
+	{
+	  return 0;
+	}
+}

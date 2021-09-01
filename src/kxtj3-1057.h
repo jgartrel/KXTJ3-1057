@@ -114,7 +114,11 @@ public:
 	// returns true if a motion interrupt has occured
 	// returns false if no motion interrupt has occured or the no activity timer elapsed
 	bool isMotionInt();
-	
+
+	// returns a valid axis mask denoting which axis triggered the interrupt
+        // returns 0 if no axis triggered the interrupt or readRegister fails
+	kxtj3_axis_mask intSource();
+
 private:
 	uint8_t I2CAddress;
 	float 	accelSampleRate; 	// Sample Rate - 0.781, 1.563, 3.125, 6.25, 12.5, 25, 50, 100, 200, 400, 800, 1600Hz
