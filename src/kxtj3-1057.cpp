@@ -315,7 +315,7 @@ void KXTJ3::applySettings( void )
 //  Configure interrupt, stop or move, threshold and duration
 //	Durationsteps and maximum values depend on the ODR chosen.
 //****************************************************************************//
-kxtj3_status_t KXTJ3::intConf(uint16_t threshold, uint8_t moveDur, uint8_t naDur, bool polarity )
+kxtj3_status_t KXTJ3::intConf( uint16_t threshold, uint8_t moveDur, uint8_t naDur, bool polarity, bool pulsed, bool unlatched, kxtj3_axis_mask axisMask)
 {
 	// Note that to properly change the value of this register, the PC1 bit in CTRL_REG1must first be set to “0”.
 	standby( true );
@@ -324,10 +324,13 @@ kxtj3_status_t KXTJ3::intConf(uint16_t threshold, uint8_t moveDur, uint8_t naDur
 
 	// Build INT_CTRL_REG1
 
-	uint8_t dataToWrite = 0x2A;  		// Interrupt enabled, active LOW, non-latched
-	
+	uint8_t dataToWrite = 0x22;    // Interrupt pin enabled, self-test polarity positive
+
 	if( polarity == HIGH )
 		dataToWrite |= (0x01 << 4);		// Active HIGH
+
+	if( pulsed == true )
+		dataToWrite |= (0x01 << 3);            // Pulsed interrupt mode
 
 	_DEBBUG ("KXTJ3_INT_CTRL_REG1: 0x", dataToWrite);
 	returnError = writeRegister(KXTJ3_INT_CTRL_REG1, dataToWrite);
@@ -344,7 +347,10 @@ kxtj3_status_t KXTJ3::intConf(uint16_t threshold, uint8_t moveDur, uint8_t naDur
 
 	// Build INT_CTRL_REG2
 
-	dataToWrite = 0xBF;  // enable interrupt on all axis any direction - Unlatched
+	dataToWrite = axisMask & 0x3F;  // enable interrupt for specified axis (all axis any direction, default)
+
+	if( unlatched == true )
+		dataToWrite |= (0x01 << 7);     // Unlatched interrupt enabled
 
 	_DEBBUG ("KXTJ3_INT_CTRL_REG1: 0x", dataToWrite);
 	returnError = writeRegister(KXTJ3_INT_CTRL_REG2, dataToWrite);

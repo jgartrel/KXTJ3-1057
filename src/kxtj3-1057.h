@@ -65,6 +65,15 @@ typedef enum
 	Z,
 } axis_t;
 
+typedef int kxtj3_axis_mask;
+static const kxtj3_axis_mask ZPWUE = 1<<0;
+static const kxtj3_axis_mask ZNWUE = 1<<1;
+static const kxtj3_axis_mask YPWUE = 1<<2;
+static const kxtj3_axis_mask YNWUE = 1<<3;
+static const kxtj3_axis_mask XPWUE = 1<<4;
+static const kxtj3_axis_mask XNWUE = 1<<5;
+static const kxtj3_axis_mask ALLWUE = 0x3F;
+
 class KXTJ3
 {
 public:
@@ -94,7 +103,7 @@ public:
 	// Threshold (g) = threshold (counts) / 256(counts/g)
 	// timeDur (sec) = WAKEUP_COUNTER (counts) / Wake-Up Function ODR(Hz)
 	// Non-ActivityTime (sec) = NA_COUNTER (counts) / Wake-Up Function ODR(Hz)
-	kxtj3_status_t intConf( uint16_t threshold, uint8_t moveDur, uint8_t naDur, bool polarity = HIGH);
+	kxtj3_status_t intConf( uint16_t threshold, uint8_t moveDur, uint8_t naDur, bool polarity = HIGH, bool pulsed = false, bool unlatched = true, kxtj3_axis_mask axisMask = ALLWUE );
 	
 	// Read axis acceleration as Float
 	float axisAccel( axis_t _axis);
@@ -133,6 +142,8 @@ private:
 #define KXTJ3_STATUS				         0x18
 #define KXTJ3_INT_SOURCE1            0x16
 #define KXTJ3_INT_SOURCE2            0x17
+
+#define KXTJ3_INT_REL                0x1A
 
 #define KXTJ3_CTRL_REG1              0x1B // *
 #define KXTJ3_CTRL_REG2              0x1D // *
