@@ -278,6 +278,24 @@ void KXTJ3::applySettings( void )
 	_DEBBUG ("KXTJ3_DATA_CTRL_REG: 0x", dataToWrite);
 	writeRegister(KXTJ3_DATA_CTRL_REG, dataToWrite);
 
+	//Build CTRL_REG2
+	dataToWrite = 0x00;
+
+	//  Convert ODR
+	if(accelSampleRate < 1)			dataToWrite |= 0x00;	// 0.781Hz
+	else if(accelSampleRate < 2)		dataToWrite |= 0x01;	// 1.563Hz
+	else if(accelSampleRate < 4)		dataToWrite |= 0x02;	// 3.125Hz
+	else if(accelSampleRate < 8)		dataToWrite |= 0x03;	// 6.25Hz
+	else if(accelSampleRate < 16)		dataToWrite |= 0x04;	// 12.5Hz
+	else if(accelSampleRate < 30)		dataToWrite |= 0x05;	// 25Hz
+	else if(accelSampleRate < 60)		dataToWrite |= 0x06;	// 50Hz
+	else					dataToWrite |= 0x07;	// 100Hz and above
+
+	//Now, write the patched together data
+	_DEBBUG ("KXTJ3_CTRL_REG2: 0x", dataToWrite);
+	writeRegister(KXTJ3_CTRL_REG2, dataToWrite);
+
+
 	//Build CTRL_REG1
 	
 	// LOW power, 8-bit mode
