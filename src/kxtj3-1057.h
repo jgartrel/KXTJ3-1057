@@ -43,9 +43,6 @@ Distributed as-is; no warranty is given.
   	#define _DEBBUG(...)
 #endif
 
-//Print variable name
-#define getName(var)  #var
-
 // Return values 
 typedef enum
 {
@@ -88,6 +85,10 @@ public:
 	
 	// readRegister reads one 8-bit register
 	kxtj3_status_t readRegister(uint8_t* outputPointer, uint8_t offset);
+
+	//ReadRegisterRegion takes a uint8 array address as input and reads
+	//  a chunk of memory into that array.
+	kxtj3_status_t readRegisterRegion(uint8_t*, uint8_t, uint8_t );
 	
 	// Reads two 8-bit regs, LSByte then MSByte order, and concatenates them.
 	// Acts as a 16-bit read operation
@@ -126,10 +127,6 @@ private:
 
 	//Apply settings at .begin()
 	void applySettings( void );
-
-	//ReadRegisterRegion takes a uint8 array address as input and reads
-	//  a chunk of memory into that array.
-	kxtj3_status_t readRegisterRegion(uint8_t*, uint8_t, uint8_t );
 };
 
 //Device Registers
